@@ -4,6 +4,7 @@ import Input from '../../components/UI/Input/Input';
 import classes from './EmployeeBuilder.module.css';
 import Button from '../../components/UI/Button/Button';
 import axios from '../../axios-empdata';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 class EmployeeBuilder extends Component {
   state = {
@@ -103,6 +104,7 @@ class EmployeeBuilder extends Component {
       //       elementConfig:
       //   }
     },
+    loading: false,
   };
 
   personalInfoChangedHandler = (event, inputIdentifier) => {
@@ -133,6 +135,9 @@ class EmployeeBuilder extends Component {
     });
   };
   formDataHandler = event => {
+    this.setState({
+      loading: true,
+    });
     event.preventDefault();
     const formData = {};
     for (let formElement in this.state.personalInfo) {
@@ -144,8 +149,17 @@ class EmployeeBuilder extends Component {
 
     axios
       .post('./employeeData.json', empData)
-      .then(response => console.log(response))
-      .catch(error => console.log(error));
+      .then(response => {
+        this.setState({
+          loading: false,
+        });
+      })
+      .catch(error => {
+        console.log(error);
+        this.setState({
+          loading: false,
+        });
+      });
   };
   render() {
     let personalInfoArray = [],
@@ -220,6 +234,10 @@ class EmployeeBuilder extends Component {
         <Button btnType="Success">SUBMIT</Button>
       </form>
     );
+
+    if (this.state.loading) {
+      form = <Spinner />;
+    }
     return (
       <div className={classes.Content}>
         <h1 className={classes.heading}>Enter your Employee Data</h1>
