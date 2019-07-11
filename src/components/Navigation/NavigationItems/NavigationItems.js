@@ -5,10 +5,10 @@ import NavigationItem from './NavigationItem/NavigationItem';
 
 const navigationItems = () => (
   <ul className={classes.NavigationItems}>
-    <NavigationItem link="/" active>
+    <NavigationItem link="/" exact>
       ADD Employee
     </NavigationItem>
-    <NavigationItem link="/">Employee Directory</NavigationItem>
+    <NavigationItem link="/empdir">Employee Directory</NavigationItem>
   </ul>
 );
 

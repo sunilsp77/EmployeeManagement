@@ -8,7 +8,7 @@ import Spinner from '../../components/UI/Spinner/Spinner';
 
 class EmployeeBuilder extends Component {
   state = {
-    personalInfo: {
+    empInfo: {
       name: {
         elementType: 'input',
         elementConfig: {
@@ -17,14 +17,6 @@ class EmployeeBuilder extends Component {
         },
         value: '',
         label: 'Name',
-      },
-      gender: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'radio',
-        },
-        value: 'male',
-        label: 'Gender',
       },
       birthdate: {
         elementType: 'input',
@@ -36,16 +28,6 @@ class EmployeeBuilder extends Component {
         value: '2018-07-22',
         label: 'Birthdate',
       },
-      photo: {
-        elementType: 'input',
-        elementConfig: {
-          type: 'file',
-          accept: 'image/png, image/jpeg',
-        },
-        label: 'Image',
-      },
-    },
-    home_workInfo: {
       mailingAddress: {
         elementType: 'textarea',
         elementConfig: {
@@ -85,8 +67,6 @@ class EmployeeBuilder extends Component {
         value: '',
         label: 'LinkedIn Url',
       },
-    },
-    jobDetails: {
       department: {
         elementType: 'select',
         elementConfig: {
@@ -99,52 +79,45 @@ class EmployeeBuilder extends Component {
         value: 'diagnostics',
         label: 'Department',
       },
-      //   skills: {
-      //       elementType: 'input',
-      //       elementConfig:
-      //   }
     },
+    // Cplusplus: true,
+    // Java: true,
+    // Python: true,
     loading: false,
   };
 
-  personalInfoChangedHandler = (event, inputIdentifier) => {
-    const updatedForm = { ...this.state.personalInfo };
+  empInfoChangedHandler = (event, inputIdentifier) => {
+    const updatedForm = { ...this.state.empInfo };
     const updatedFormElement = { ...updatedForm[inputIdentifier] };
     updatedFormElement.value = event.target.value;
     updatedForm[inputIdentifier] = updatedFormElement;
     this.setState({
-      personalInfo: updatedForm,
+      empInfo: updatedForm,
     });
   };
-  home_workInfoChangedHandler = (event, inputIdentifier) => {
-    const updatedForm = { ...this.state.home_workInfo };
-    const updatedFormElement = { ...updatedForm[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
-    updatedForm[inputIdentifier] = updatedFormElement;
-    this.setState({
-      home_workInfo: updatedForm,
-    });
-  };
-  jobDetailsChangedHandler = (event, inputIdentifier) => {
-    const updatedForm = { ...this.state.jobDetails };
-    const updatedFormElement = { ...updatedForm[inputIdentifier] };
-    updatedFormElement.value = event.target.value;
-    updatedForm[inputIdentifier] = updatedFormElement;
-    this.setState({
-      jobDetails: updatedForm,
-    });
-  };
+
+  // handleInputChange = event => {
+  //   const target = event.target;
+  //   const value = target.type === 'checkbox' ? target.checked : target.value;
+  //   const name = target.name;
+
+  //   this.setState({
+  //     [name]: value,
+  //   });
+  // };
+
   formDataHandler = event => {
     this.setState({
       loading: true,
     });
     event.preventDefault();
     const formData = {};
-    for (let formElement in this.state.personalInfo) {
-      formData[formElement] = this.state.personalInfo[formElement].value;
+    for (let formElement in this.state.empInfo) {
+      formData[formElement] = this.state.empInfo[formElement].value;
     }
+
     const empData = {
-      personalInfo: formData,
+      empInfo: formData,
     };
 
     axios
@@ -162,33 +135,18 @@ class EmployeeBuilder extends Component {
       });
   };
   render() {
-    let personalInfoArray = [],
-      home_workInfoArray = [],
-      jobDetailsInfoArray = [];
-    for (let key in this.state.personalInfo) {
-      personalInfoArray.push({
+    let empInfoArray = [];
+    for (let key in this.state.empInfo) {
+      empInfoArray.push({
         id: key,
-        config: this.state.personalInfo[key],
-      });
-    }
-    for (let key in this.state.home_workInfo) {
-      home_workInfoArray.push({
-        id: key,
-        config: this.state.home_workInfo[key],
-      });
-    }
-    for (let key in this.state.jobDetails) {
-      jobDetailsInfoArray.push({
-        id: key,
-        config: this.state.jobDetails[key],
+        config: this.state.empInfo[key],
       });
     }
 
     let form = (
       <form onSubmit={this.formDataHandler}>
         <fieldset>
-          <legend>Personal information</legend>
-          {personalInfoArray.map(formElement => (
+          {empInfoArray.map(formElement => (
             <Input
               key={formElement.id}
               elementType={formElement.config.elementType}
@@ -196,40 +154,38 @@ class EmployeeBuilder extends Component {
               value={formElement.config.value}
               label={formElement.config.label}
               changed={event =>
-                this.personalInfoChangedHandler(event, formElement.id)
+                this.empInfoChangedHandler(event, formElement.id)
               }
             />
           ))}
-        </fieldset>
-        <fieldset>
-          <legend>Home & Work information</legend>
-          {home_workInfoArray.map(formElement => (
-            <Input
-              key={formElement.id}
-              elementType={formElement.config.elementType}
-              elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              label={formElement.config.label}
-              changed={event =>
-                this.home_workInfoChangedHandler(event, formElement.id)
-              }
+          {/* <label className={classes.Label}>Skills</label>
+          <label>
+            C++:
+            <input
+              name="Cplusplus"
+              type="checkbox"
+              checked={this.state.Cplusplus}
+              onChange={this.handleInputChange}
             />
-          ))}
-        </fieldset>
-        <fieldset>
-          <legend>Job Details</legend>
-          {jobDetailsInfoArray.map(formElement => (
-            <Input
-              key={formElement.id}
-              elementType={formElement.config.elementType}
-              elementConfig={formElement.config.elementConfig}
-              value={formElement.config.value}
-              label={formElement.config.label}
-              changed={event =>
-                this.jobDetailsChangedHandler(event, formElement.id)
-              }
+          </label>
+          <label>
+            JAVA:
+            <input
+              name="Java"
+              type="checkbox"
+              checked={this.state.Java}
+              onChange={this.handleInputChange}
             />
-          ))}
+          </label>
+          <label>
+            Python:
+            <input
+              name="Python"
+              type="checkbox"
+              checked={this.state.Python}
+              onChange={this.handleInputChange}
+            />
+          </label> */}
         </fieldset>
         <Button btnType="Success">SUBMIT</Button>
       </form>

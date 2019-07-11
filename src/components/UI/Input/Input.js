@@ -31,6 +31,7 @@ const input = props => {
         <select
           className={classes.InputElement}
           value={props.value}
+          multiple={props.elementConfig.multiple}
           onChange={props.changed}
         >
           {props.elementConfig.options.map(option => (
