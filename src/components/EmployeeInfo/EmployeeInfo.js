@@ -16,7 +16,7 @@ const employee = props => {
     <div className={classes.EmployeeInfo}>
       {details.map(property => (
         <p key={property.name}>
-          {property.name} ' : ' {property.value}
+          {property.name} : {property.value}
         </p>
       ))}
     </div>
